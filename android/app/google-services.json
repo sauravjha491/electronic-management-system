@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "341801448801",
+    "project_id": "jay-janki-electronics",
+    "storage_bucket": "jay-janki-electronics.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:341801448801:android:3051453fc1a29968934120",
+        "android_client_info": {
+          "package_name": "com.jayjanaki.electronics_manager"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHuZbkatN9V8lAI5iR6AO-gH6GsztbU7E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
