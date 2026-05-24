@@ -59,11 +59,6 @@ A modern, high-performance **Electronics Inventory & Management System** built w
    flutter run
    ```
 
-## 📸 Screenshots
-
-| Home Screen | Admin Dashboard | Product Details |
-|:---:|:---:|:---:|
-| ![Home](https://via.placeholder.com/200x400?text=Home+Screen) | ![Dashboard](https://via.placeholder.com/200x400?text=Admin+Dashboard) | ![Details](https://via.placeholder.com/200x400?text=Product+Details) |
 
 ## 📝 License
 This project is licensed under the MIT License.
