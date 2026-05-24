@@ -118,7 +118,7 @@ class AdminDashboard extends StatelessWidget {
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold)),
                                 subtitle: Text(
-                                    'Wholesaler: ${item.wholesalerName}\nStock: ${item.quantity}',
+                                    'Code: ${item.encodedCostPrice}\nStock: ${item.quantity}',
                                     style: TextStyle(
                                         height: 1.5,
                                         color: isLowStock

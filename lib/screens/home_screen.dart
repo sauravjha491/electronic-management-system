@@ -166,6 +166,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                   fontWeight: FontWeight.w500,
                                   fontSize: 12,
                                 )),
+                              const SizedBox(height: 4),
+                              Text('Code: ${item.encodedCostPrice}', 
+                                style: TextStyle(
+                                  color: theme.colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                )),
                             ],
                           ),
                           trailing: Column(
