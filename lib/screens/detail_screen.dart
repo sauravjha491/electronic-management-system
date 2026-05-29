@@ -77,16 +77,10 @@ class DetailScreen extends StatelessWidget {
                     _buildInfoCard(
                       'Profit Analysis (Admin Only)',
                       [
-                        _buildInfoRow(Icons.shopping_cart_rounded, 'Cost Price',
-                            '₹${item.costPrice.toStringAsFixed(0)}'),
-                        _buildInfoRow(Icons.trending_up_rounded, 'Markup Added',
-                            '₹${item.markupPrice.toStringAsFixed(0)}'),
-                        _buildInfoRow(
-                          Icons.insights_rounded,
-                          'Profit Margin',
-                          '${((item.markupPrice / item.costPrice) * 100).toStringAsFixed(1)}%',
-                          color: Colors.green,
-                        ),
+                        _buildInfoRow(Icons.shopping_cart_rounded,
+                            'Cost Price Code', item.encodedCostPrice),
+                        _buildInfoRow(Icons.trending_up_rounded, 'Markup Code',
+                            item.encodedMarkupMultiplier),
                       ],
                     ),
                   ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/electronics_item.dart';
 import '../providers/electronics_provider.dart';
+import '../utils/price_utils.dart';
 
 class AddEditScreen extends StatefulWidget {
   final ElectronicsItem? item;
@@ -17,10 +18,12 @@ class _AddEditScreenState extends State<AddEditScreen> {
   late TextEditingController _nameController;
   late TextEditingController _wholesalerController;
   late TextEditingController _costPriceController;
-  late TextEditingController _markupPriceController;
+  late TextEditingController _markupMultiplierController;
   late TextEditingController _sellingPriceController;
   late TextEditingController _locationController;
   late TextEditingController _quantityController;
+  double _decodedCost = 0;
+  double _decodedMarkup = 1.0;
 
   @override
   void initState() {
@@ -28,16 +31,28 @@ class _AddEditScreenState extends State<AddEditScreen> {
     _nameController = TextEditingController(text: widget.item?.name ?? '');
     _wholesalerController =
         TextEditingController(text: widget.item?.wholesalerName ?? '');
-    _costPriceController =
-        TextEditingController(text: widget.item?.costPrice.toString() ?? '');
-    _markupPriceController =
-        TextEditingController(text: widget.item?.markupPrice.toString() ?? '');
+
+    // Set controllers with alphabets instead of numbers
+    _costPriceController = TextEditingController(
+        text: widget.item != null
+            ? PriceUtils.encode(widget.item!.costPrice)
+            : '');
+    _markupMultiplierController = TextEditingController(
+        text: widget.item != null
+            ? PriceUtils.encode(widget.item!.markupMultiplier)
+            : 'L.B'); // 'L.B' is '1.0'
+
     _sellingPriceController =
         TextEditingController(text: widget.item?.sellingPrice.toString() ?? '');
     _locationController =
         TextEditingController(text: widget.item?.location ?? '');
     _quantityController =
         TextEditingController(text: widget.item?.quantity.toString() ?? '0');
+
+    if (widget.item != null) {
+      _decodedCost = widget.item!.costPrice;
+      _decodedMarkup = widget.item!.markupMultiplier;
+    }
   }
 
   @override
@@ -45,18 +60,24 @@ class _AddEditScreenState extends State<AddEditScreen> {
     _nameController.dispose();
     _wholesalerController.dispose();
     _costPriceController.dispose();
-    _markupPriceController.dispose();
+    _markupMultiplierController.dispose();
     _sellingPriceController.dispose();
     _locationController.dispose();
     _quantityController.dispose();
     super.dispose();
   }
 
-  void _calculateSellingPrice() {
-    final cost = double.tryParse(_costPriceController.text) ?? 0;
-    final markup = double.tryParse(_markupPriceController.text) ?? 0;
-    final selling = cost + markup;
-    _sellingPriceController.text = selling.toString();
+  void _onPriceChanged() {
+    final costInput = _costPriceController.text;
+    final markupInput = _markupMultiplierController.text;
+
+    setState(() {
+      _decodedCost = PriceUtils.decode(costInput);
+      _decodedMarkup = PriceUtils.decode(markupInput);
+      final selling =
+          PriceUtils.calculateSellingPrice(_decodedCost, _decodedMarkup);
+      _sellingPriceController.text = selling.toStringAsFixed(2);
+    });
   }
 
   @override
@@ -87,16 +108,46 @@ class _AddEditScreenState extends State<AddEditScreen> {
               Row(
                 children: [
                   Expanded(
-                      child: _buildTextField(_costPriceController, 'Cost Price',
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildTextField(_costPriceController, 'Cost Code',
                           Icons.payments_rounded,
-                          isNumber: true,
-                          onChanged: (_) => _calculateSellingPrice())),
+                          isNumber:
+                              false, // Changed to false to allow alphabets
+                          onChanged: (_) => _onPriceChanged()),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 12, top: 4),
+                        child: Text(
+                            'Value: ₹${_decodedCost.toStringAsFixed(0)}',
+                            style: TextStyle(
+                                color: theme.colorScheme.primary,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12)),
+                      ),
+                    ],
+                  )),
                   const SizedBox(width: 16),
                   Expanded(
-                      child: _buildTextField(_markupPriceController, 'Markup',
-                          Icons.trending_up_rounded,
-                          isNumber: true,
-                          onChanged: (_) => _calculateSellingPrice())),
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildTextField(_markupMultiplierController,
+                          'Markup Code', Icons.trending_up_rounded,
+                          isNumber:
+                              false, // Changed to false to allow alphabets
+                          onChanged: (_) => _onPriceChanged()),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 12, top: 4),
+                        child: Text(
+                            'Value: x${_decodedMarkup.toStringAsFixed(2)}',
+                            style: TextStyle(
+                                color: theme.colorScheme.primary,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12)),
+                      ),
+                    ],
+                  )),
                 ],
               ),
               const SizedBox(height: 16),
@@ -127,8 +178,9 @@ class _AddEditScreenState extends State<AddEditScreen> {
                         id: widget.item?.id,
                         name: _nameController.text,
                         wholesalerName: _wholesalerController.text,
-                        costPrice: double.parse(_costPriceController.text),
-                        markupPrice: double.parse(_markupPriceController.text),
+                        costPrice: PriceUtils.decode(_costPriceController.text),
+                        markupMultiplier:
+                            PriceUtils.decode(_markupMultiplierController.text),
                         sellingPrice:
                             double.parse(_sellingPriceController.text),
                         location: _locationController.text,

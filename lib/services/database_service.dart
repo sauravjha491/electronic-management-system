@@ -33,8 +33,9 @@ class DatabaseService {
         wholesalerName TEXT,
         costPrice REAL,
         sellingPrice REAL,
-        markupPrice REAL,
-        location TEXT
+        markupMultiplier REAL,
+        location TEXT,
+        quantity INTEGER
       )
     ''');
   }

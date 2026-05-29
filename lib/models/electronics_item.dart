@@ -1,10 +1,12 @@
+import '../utils/price_utils.dart';
+
 class ElectronicsItem {
   final String? id;
   final String name;
   final String wholesalerName;
   final double costPrice;
   final double sellingPrice;
-  final double markupPrice;
+  final double markupMultiplier;
   final String location;
   final int quantity;
 
@@ -14,10 +16,13 @@ class ElectronicsItem {
     required this.wholesalerName,
     required this.costPrice,
     required this.sellingPrice,
-    required this.markupPrice,
+    required this.markupMultiplier,
     required this.location,
     this.quantity = 0,
   });
+
+  String get encodedCostPrice => PriceUtils.encode(costPrice);
+  String get encodedMarkupMultiplier => PriceUtils.encode(markupMultiplier);
 
   Map<String, dynamic> toMap() {
     return {
@@ -25,7 +30,7 @@ class ElectronicsItem {
       'wholesalerName': wholesalerName,
       'costPrice': costPrice,
       'sellingPrice': sellingPrice,
-      'markupPrice': markupPrice,
+      'markupMultiplier': markupMultiplier,
       'location': location,
       'quantity': quantity,
     };
@@ -38,7 +43,7 @@ class ElectronicsItem {
       wholesalerName: map['wholesalerName'] ?? '',
       costPrice: (map['costPrice'] ?? 0).toDouble(),
       sellingPrice: (map['sellingPrice'] ?? 0).toDouble(),
-      markupPrice: (map['markupPrice'] ?? 0).toDouble(),
+      markupMultiplier: (map['markupMultiplier'] ?? map['markupPrice'] ?? 1.0).toDouble(),
       location: map['location'] ?? '',
       quantity: map['quantity'] ?? 0,
     );
@@ -50,7 +55,7 @@ class ElectronicsItem {
     String? wholesalerName,
     double? costPrice,
     double? sellingPrice,
-    double? markupPrice,
+    double? markupMultiplier,
     String? location,
     int? quantity,
   }) {
@@ -60,7 +65,7 @@ class ElectronicsItem {
       wholesalerName: wholesalerName ?? this.wholesalerName,
       costPrice: costPrice ?? this.costPrice,
       sellingPrice: sellingPrice ?? this.sellingPrice,
-      markupPrice: markupPrice ?? this.markupPrice,
+      markupMultiplier: markupMultiplier ?? this.markupMultiplier,
       location: location ?? this.location,
       quantity: quantity ?? this.quantity,
     );
