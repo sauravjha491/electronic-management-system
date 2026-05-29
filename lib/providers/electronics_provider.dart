@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import '../models/electronics_item.dart';
+import '../models/bill.dart';
 import '../services/firebase_service.dart';
 
 class ElectronicsProvider with ChangeNotifier {
   final FirebaseService _firebaseService = FirebaseService();
   List<ElectronicsItem> _items = [];
+  List<Bill> _bills = [];
   bool _isLoading = false;
 
   List<ElectronicsItem> get items => _items;
+  List<Bill> get bills => _bills;
   bool get isLoading => _isLoading;
 
   Future<void> fetchItems() async {
@@ -59,5 +62,31 @@ class ElectronicsProvider with ChangeNotifier {
     }
     _isLoading = false;
     notifyListeners();
+  }
+
+  Future<void> createBill(Bill bill) async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      await _firebaseService.createBill(bill);
+      await fetchItems(); // Refresh stock
+      await fetchBills();
+    } catch (e) {
+      debugPrint('Error creating bill: $e');
+      _isLoading = false;
+      notifyListeners();
+      rethrow;
+    }
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> fetchBills() async {
+    try {
+      _bills = await _firebaseService.getBills();
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error fetching bills: $e');
+    }
   }
 }

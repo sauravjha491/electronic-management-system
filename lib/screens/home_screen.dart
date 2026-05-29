@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../providers/electronics_provider.dart';
 import 'login_screen.dart';
 import 'detail_screen.dart';
+import 'billing_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       body: CustomScrollView(
@@ -34,7 +35,8 @@ class _HomeScreenState extends State<HomeScreen> {
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: true,
-              title: Text('Inventory', 
+              title: Text(
+                'Inventory',
                 style: TextStyle(
                   color: theme.colorScheme.onSurface,
                   fontWeight: FontWeight.bold,
@@ -60,7 +62,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: const Icon(Icons.admin_panel_settings_rounded),
                   onPressed: () => Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const LoginScreen()),
+                    MaterialPageRoute(
+                        builder: (context) => const LoginScreen()),
                   ),
                 ),
               ),
@@ -86,10 +89,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide(color: theme.colorScheme.primary, width: 1),
+                    borderSide:
+                        BorderSide(color: theme.colorScheme.primary, width: 1),
                   ),
                 ),
-                onChanged: (value) => context.read<ElectronicsProvider>().searchItems(value),
+                onChanged: (value) =>
+                    context.read<ElectronicsProvider>().searchItems(value),
               ),
             ),
           ),
@@ -107,9 +112,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.inventory_2_outlined, size: 64, color: Colors.grey[400]),
+                        Icon(Icons.inventory_2_outlined,
+                            size: 64, color: Colors.grey[400]),
                         const SizedBox(height: 16),
-                        Text('No items found', style: TextStyle(color: Colors.grey[600], fontSize: 18)),
+                        Text('No items found',
+                            style: TextStyle(
+                                color: Colors.grey[600], fontSize: 18)),
                       ],
                     ),
                   ),
@@ -144,47 +152,58 @@ class _HomeScreenState extends State<HomeScreen> {
                               color: theme.colorScheme.primary.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            child: Icon(Icons.electrical_services_rounded, color: theme.colorScheme.primary),
+                            child: Icon(Icons.electrical_services_rounded,
+                                color: theme.colorScheme.primary),
                           ),
-                          title: Text(item.name, 
-                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                          title: Text(item.name,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 16)),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const SizedBox(height: 4),
                               Row(
                                 children: [
-                                  const Icon(Icons.location_on_outlined, size: 14, color: Colors.grey),
+                                  const Icon(Icons.location_on_outlined,
+                                      size: 14, color: Colors.grey),
                                   const SizedBox(width: 4),
-                                  Text(item.location, style: const TextStyle(color: Colors.grey)),
+                                  Text(item.location,
+                                      style:
+                                          const TextStyle(color: Colors.grey)),
                                 ],
                               ),
                               const SizedBox(height: 4),
-                              Text('Stock: ${item.quantity}', 
-                                style: TextStyle(
-                                  color: item.quantity < 5 ? Colors.red : Colors.green,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 12,
-                                )),
+                              Text('Stock: ${item.quantity}',
+                                  style: TextStyle(
+                                    color: item.quantity < 5
+                                        ? Colors.red
+                                        : Colors.green,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 12,
+                                  )),
                             ],
                           ),
                           trailing: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Text('₹${item.sellingPrice.toStringAsFixed(0)}', 
+                              Text(
+                                '₹${item.sellingPrice.toStringAsFixed(0)}',
                                 style: TextStyle(
                                   color: theme.colorScheme.primary,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18,
                                 ),
                               ),
-                              const Text('Selling Price', style: TextStyle(fontSize: 10, color: Colors.grey)),
+                              const Text('Selling Price',
+                                  style: TextStyle(
+                                      fontSize: 10, color: Colors.grey)),
                             ],
                           ),
                           onTap: () => Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => DetailScreen(item: item)),
+                            MaterialPageRoute(
+                                builder: (context) => DetailScreen(item: item)),
                           ),
                         ),
                       );
@@ -197,6 +216,16 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 20)),
         ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const BillingScreen()),
+        ),
+        icon: const Icon(Icons.receipt_long_rounded),
+        label: const Text('Create Bill'),
+        backgroundColor: theme.colorScheme.primary,
+        foregroundColor: Colors.white,
       ),
     );
   }
