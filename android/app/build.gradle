@@ -10,7 +10,7 @@ plugins {
 
 android {
     namespace = "com.jayjanaki.electronics_manager"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 35
     ndkVersion = "25.1.8937393"
 
     compileOptions {
